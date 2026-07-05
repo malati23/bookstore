@@ -23,10 +23,8 @@ function Freebook() {
         const data = await getBooks();
         console.log("API Response (data) in Freebook:", data);
 
-        // Filter only books where category is "Free"
-        const filterdata = data.filter((item) => item.category === "Free");
-        setBookList(filterdata);
-        console.log("Filtered Free Books State:", filterdata);
+        setBookList(data);
+        console.log("Filtered Free Books State:", data);
 
         setLoading(false);
       } catch (err) {
