@@ -27,7 +27,7 @@ function Banner() {
 <div className="validator-hint">Enter valid email address</div>
     <button className="btn  mt-6 btn-secondary">Secondary</button>
      </div>
-      <div className='w-full md:w-1/2'> 
+      <div className='w-full md:w-1/2 flex items-center justify-center mt-12 md:mt-32'> 
       <img src={book} className='w-90 h-90' alt=''/>
       </div>
     </div>

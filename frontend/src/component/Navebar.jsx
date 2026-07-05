@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Login from './Login';
+import { useAuth } from '../context/AuthProvider';
+import { useCart } from '../hooks/useCart';
+import { useWishlist } from '../hooks/useWishlist';
+import { Link } from 'react-router-dom';
 
 function Navebar() {
+  const { authUser, logout } = useAuth();
+  const { totalItems } = useCart();
+  const { totalWishlistItems } = useWishlist();
   const [theme, settheme] = useState(
     localStorage.getItem("theme") || "light"
   )
@@ -34,14 +41,16 @@ function Navebar() {
       window.removeEventListener('scroll',handleScroll)
     }
   },[])
-  const navitem=(
+  const navitem = (
     <>
-     <li><a href='/'>Home</a></li>
+      <li><a href='/'>Home</a></li>
       <li><a href='/Course'>Course</a></li>
-      <li><a>contact</a></li>
-      <li><a>About</a></li>
+      {authUser && <li><a href='/my-orders'>My Orders</a></li>}
+      <li><a href='/contact'>Contact</a></li>
+      <li><a href='/about'>About</a></li>
+      <li><a href='/faq'>FAQ</a></li>
     </>
-  )
+  );
   return (
     <>
     <div className={`max-w-screen-2xl container mx-auto md:px-20 px-4 fixed top-0 left-0 right-0 z-50 ${
@@ -113,12 +122,62 @@ function Navebar() {
       d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
   </svg>
 </label>
+
+  <Link to="/Wishlist" className="relative p-2 text-gray-700 dark:text-gray-300 hover:text-pink-500 transition-colors cursor-pointer">
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+    {totalWishlistItems > 0 && (
+      <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-pink-500 rounded-full">
+        {totalWishlistItems}
+      </span>
+    )}
+  </Link>
+
+  <Link to="/Cart" className="relative p-2 mr-2 text-gray-700 dark:text-gray-300 hover:text-pink-500 transition-colors cursor-pointer">
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+    {totalItems > 0 && (
+      <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-pink-500 rounded-full">
+        {totalItems}
+      </span>
+    )}
+  </Link>
+
   <div>
-    <a className="bg-black text-white p-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer"
-    onClick={()=> document.getElementById("my_modal_3").showModal()}>
-      
-      Login</a>
-      <Login/>
+    {authUser ? (
+      <div className="flex items-center gap-3">
+        <Link 
+          to="/admin" 
+          className="hidden lg:block bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 duration-300 cursor-pointer text-sm font-semibold whitespace-nowrap"
+        >
+          Admin
+        </Link>
+        <button 
+          className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 duration-300 cursor-pointer"
+          onClick={() => {
+            logout();
+          }}
+        >
+          Logout
+        </button>
+      </div>
+    ) : (
+      <div className="flex items-center gap-3">
+        <Link 
+          to="/admin" 
+          className="hidden lg:block bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 duration-300 cursor-pointer text-sm font-semibold whitespace-nowrap"
+        >
+          Admin
+        </Link>
+        <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer"
+        onClick={()=> document.getElementById("my_modal_3").showModal()}>
+          Login
+        </a>
+        <Login/>
+      </div>
+    )}
   </div>
 </div>
  </div>
