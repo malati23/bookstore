@@ -9,7 +9,7 @@ const emailService = require('../services/emailService');
  * @route   POST /api/auth/register (To be created later)
  * @access  Public
  */
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   try {
     // 1. Receive name, email, password from request body
     const { name, email, password } = req.body;
@@ -70,7 +70,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     // 500 Internal Server Error: Something went wrong on the server
     console.error(error);
-    res.status(500).json({ message: 'Server error during registration', error: error.message });
+    next(error);
   }
 };
 
@@ -79,7 +79,7 @@ const registerUser = async (req, res) => {
  * @route   POST /api/auth/login (To be created later)
  * @access  Public
  */
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   try {
     // 1. Receive email and password from request body
     const { email, password } = req.body;
@@ -129,7 +129,7 @@ const loginUser = async (req, res) => {
   } catch (error) {
     // 500 Internal Server Error: Something went wrong on the server
     console.error(error);
-    res.status(500).json({ message: 'Server error during login', error: error.message });
+    next(error);
   }
 };
 
@@ -138,7 +138,7 @@ const loginUser = async (req, res) => {
  * @route   POST /api/auth/forgot-password
  * @access  Public
  */
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: 'Please provide an email' });
@@ -171,7 +171,7 @@ const forgotPassword = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error during forgot password', error: error.message });
+    next(error);
   }
 };
 
@@ -180,7 +180,7 @@ const forgotPassword = async (req, res) => {
  * @route   POST /api/auth/reset-password/:token
  * @access  Public
  */
-const resetPassword = async (req, res) => {
+const resetPassword = async (req, res, next) => {
   try {
     const { token } = req.params;
     const { password } = req.body;
@@ -210,7 +210,7 @@ const resetPassword = async (req, res) => {
     res.status(200).json({ success: true, message: 'Password has been reset successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error during password reset', error: error.message });
+    next(error);
   }
 };
 

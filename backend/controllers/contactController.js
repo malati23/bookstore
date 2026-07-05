@@ -1,30 +1,30 @@
 const Contact = require('../models/Contact');
 
 // Create new contact message
-const createContact = async (req, res) => {
+const createContact = async (req, res, next) => {
   try {
     const newContact = new Contact(req.body);
     const savedContact = await newContact.save();
     res.status(201).json(savedContact);
   } catch (error) {
     console.error("Error creating contact message:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // Fetch all contact messages
-const getAllContacts = async (req, res) => {
+const getAllContacts = async (req, res, next) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json(contacts);
   } catch (error) {
     console.error("Error fetching contact messages:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // Update contact status (e.g., mark as Read)
-const updateContactStatus = async (req, res) => {
+const updateContactStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -42,12 +42,12 @@ const updateContactStatus = async (req, res) => {
     res.status(200).json(updatedContact);
   } catch (error) {
     console.error("Error updating contact message status:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // Delete a contact message
-const deleteContact = async (req, res) => {
+const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedContact = await Contact.findByIdAndDelete(id);
@@ -59,7 +59,7 @@ const deleteContact = async (req, res) => {
     res.status(200).json({ message: "Contact message deleted successfully" });
   } catch (error) {
     console.error("Error deleting contact message:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 

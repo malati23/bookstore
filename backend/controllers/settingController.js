@@ -1,7 +1,7 @@
 const Setting = require('../models/Setting');
 
 // Get settings
-const getSettings = async (req, res) => {
+const getSettings = async (req, res, next) => {
   try {
     let settings = await Setting.findOne();
     if (!settings) {
@@ -10,12 +10,12 @@ const getSettings = async (req, res) => {
     res.status(200).json(settings);
   } catch (error) {
     console.error("Error fetching settings:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // Update settings
-const updateSettings = async (req, res) => {
+const updateSettings = async (req, res, next) => {
   try {
     const settingsData = req.body;
     let settings = await Setting.findOne();
@@ -30,7 +30,7 @@ const updateSettings = async (req, res) => {
     res.status(200).json(settings);
   } catch (error) {
     console.error("Error updating settings:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 

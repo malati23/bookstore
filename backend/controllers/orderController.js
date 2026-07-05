@@ -2,7 +2,7 @@ const Order = require('../models/Order');
 const emailService = require('../services/emailService');
 
 // 1. Fetch all orders (or by userId)
-const getAllOrders = async (req, res) => {
+const getAllOrders = async (req, res, next) => {
   try {
     const { userId } = req.query;
     const query = userId ? { userId } : {};
@@ -10,12 +10,12 @@ const getAllOrders = async (req, res) => {
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // 2. Fetch single order by ID
-const getOrderById = async (req, res) => {
+const getOrderById = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
@@ -24,12 +24,12 @@ const getOrderById = async (req, res) => {
     res.status(200).json(order);
   } catch (error) {
     console.error("Error fetching order:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // 3. Create new order
-const createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
   try {
     const newOrder = new Order(req.body);
     const savedOrder = await newOrder.save();
@@ -47,12 +47,12 @@ const createOrder = async (req, res) => {
     res.status(201).json(savedOrder);
   } catch (error) {
     console.error("Error creating order:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // 4. Update order status
-const updateOrderStatus = async (req, res) => {
+const updateOrderStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { orderStatus } = req.body;
@@ -75,12 +75,12 @@ const updateOrderStatus = async (req, res) => {
     res.status(200).json(updatedOrder);
   } catch (error) {
     console.error("Error updating order status:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // 5. Update payment status
-const updatePaymentStatus = async (req, res) => {
+const updatePaymentStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { paymentStatus } = req.body;
@@ -103,7 +103,7 @@ const updatePaymentStatus = async (req, res) => {
     res.status(200).json(updatedOrder);
   } catch (error) {
     console.error("Error updating payment status:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 

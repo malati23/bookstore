@@ -77,6 +77,7 @@ const sendPasswordResetEmail = async (email, resetToken, name) => {
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
       <div style="background-color: #3b82f6; padding: 20px; text-align: center;">
+        <img src="https://via.placeholder.com/150x50?text=BookStore+Logo" alt="BookStore Logo" style="max-height: 50px; margin-bottom: 10px;" />
         <h1 style="color: white; margin: 0;">BookStore</h1>
       </div>
       <div style="padding: 30px;">
@@ -186,14 +187,15 @@ const sendPasswordChangeConfirmationEmail = async (email, name) => {
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
       <div style="background-color: #ef4444; padding: 20px; text-align: center;">
+        <img src="https://via.placeholder.com/150x50?text=BookStore+Logo" alt="BookStore Logo" style="max-height: 50px; margin-bottom: 10px;" />
         <h1 style="color: white; margin: 0;">Modern BookStore</h1>
       </div>
       <div style="padding: 30px;">
         <p style="font-size: 16px; color: #333;">Hi ${name},</p>
-        <p style="font-size: 16px; color: #333;">This email is to confirm that your password was changed successfully.</p>
+        <p style="font-size: 16px; color: #333;">This email is to confirm that your password has been changed successfully.</p>
         <p style="font-size: 16px; color: #333;"><strong>Date & Time:</strong> ${currentDate}</p>
         <div style="background-color: #fee2e2; padding: 15px; border-left: 4px solid #ef4444; margin: 20px 0;">
-          <p style="margin: 0; color: #b91c1c;"><strong>Security Warning:</strong> If you did not perform this action, please contact support immediately at support@modernbookstore.com.</p>
+          <p style="margin: 0; color: #b91c1c;"><strong>Security Warning:</strong> If you did not make this change, contact support immediately.</p>
         </div>
         <p style="font-size: 14px; color: #777;">Thank you,<br>The Modern BookStore Team</p>
       </div>
@@ -202,7 +204,7 @@ const sendPasswordChangeConfirmationEmail = async (email, name) => {
   
   await sendMailWrapper({
     to: email,
-    subject: "Your Password Was Changed Successfully",
+    subject: "Password Changed Successfully",
     html
   });
 };

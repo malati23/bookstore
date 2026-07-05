@@ -1,18 +1,18 @@
 const Review = require('../models/Review');
 
 // Fetch all reviews
-const getAllReviews = async (req, res) => {
+const getAllReviews = async (req, res, next) => {
   try {
     const reviews = await Review.find().sort({ createdAt: -1 });
     res.status(200).json(reviews);
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // Update review status
-const updateReviewStatus = async (req, res) => {
+const updateReviewStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -30,12 +30,12 @@ const updateReviewStatus = async (req, res) => {
     res.status(200).json(updatedReview);
   } catch (error) {
     console.error("Error updating review status:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
 // Delete review
-const deleteReview = async (req, res) => {
+const deleteReview = async (req, res, next) => {
   try {
     const { id } = req.params;
     
@@ -48,7 +48,7 @@ const deleteReview = async (req, res) => {
     res.status(200).json({ message: "Review deleted successfully" });
   } catch (error) {
     console.error("Error deleting review:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 

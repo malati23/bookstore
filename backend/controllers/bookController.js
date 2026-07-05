@@ -2,7 +2,7 @@
 const Book = require('../models/Book');
 
 // 1. Get all books
-const getAllBooks = async (req, res) => {
+const getAllBooks = async (req, res, next) => {
     try {
         // Find all books in the database using the model
         const books = await Book.find();
@@ -10,12 +10,12 @@ const getAllBooks = async (req, res) => {
         res.status(200).json(books);
     } catch (error) {
         // If an error occurs, return a 500 Internal Server Error with the error message
-        res.status(500).json({ message: "Failed to fetch books", error: error.message });
+        next(error);
     }
 };
 
 // 2. Get a single book by ID
-const getBookById = async (req, res) => {
+const getBookById = async (req, res, next) => {
     try {
         // Find a specific book by the ID provided in the request parameters (URL: /books/:id)
         const book = await Book.findById(req.params.id);
@@ -29,12 +29,12 @@ const getBookById = async (req, res) => {
         res.status(200).json(book);
     } catch (error) {
         // Return a 500 status if there's an error (e.g., invalid ID format)
-        res.status(500).json({ message: "Failed to fetch the book", error: error.message });
+        next(error);
     }
 };
 
 // 3. Create a new book
-const createBook = async (req, res) => {
+const createBook = async (req, res, next) => {
     try {
         // Create a new instance of the Book model with data from the request body
         // and save it to the database
@@ -49,7 +49,7 @@ const createBook = async (req, res) => {
 };
 
 // 4. Update an existing book
-const updateBook = async (req, res) => {
+const updateBook = async (req, res, next) => {
     try {
         // Find the book by ID and update it with the data provided in the request body
         // { new: true } ensures the method returns the updated document rather than the old one
@@ -73,7 +73,7 @@ const updateBook = async (req, res) => {
 };
 
 // 5. Delete a book
-const deleteBook = async (req, res) => {
+const deleteBook = async (req, res, next) => {
     try {
         // Find the book by ID and remove it from the database
         const deletedBook = await Book.findByIdAndDelete(req.params.id);
@@ -87,7 +87,7 @@ const deleteBook = async (req, res) => {
         res.status(200).json({ message: "Book deleted successfully" });
     } catch (error) {
         // Return a 500 status if an error occurs during deletion
-        res.status(500).json({ message: "Failed to delete book", error: error.message });
+        next(error);
     }
 };
 
