@@ -16,7 +16,7 @@ const OrderDetails = () => {
     window.scrollTo(0, 0);
     const fetchOrderDetails = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders/${orderId}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
         setOrder(response.data);
       } catch (error) {
         console.error('Error fetching order details:', error);

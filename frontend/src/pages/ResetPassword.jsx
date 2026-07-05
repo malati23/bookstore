@@ -69,7 +69,7 @@ const ResetPassword = () => {
 
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password/${token}`, { password });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`, { password });
       
       // Auto redirect to home and open login modal
       navigate('/');

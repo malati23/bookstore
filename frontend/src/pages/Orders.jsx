@@ -25,7 +25,7 @@ const Orders = () => {
           userId = userObj._id;
         }
         
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders${userId ? `?userId=${userId}` : ''}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders${userId ? `?userId=${userId}` : ''}`);
         setOrders(response.data);
       } catch (error) {
         console.error("Error fetching orders:", error);

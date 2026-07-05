@@ -54,7 +54,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/settings`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/settings`);
         if (response.data) {
           setSettings({ ...defaultSettings, ...response.data });
         }
@@ -78,7 +78,7 @@ const Settings = () => {
     setIsSaving(true);
     
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/settings`, settings);
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/settings`, settings);
       showToast('Settings saved successfully!', 'success');
     } catch (error) {
       console.error("Error saving settings:", error);
@@ -92,7 +92,7 @@ const Settings = () => {
     if (window.confirm("Are you sure you want to reset all settings to defaults?")) {
       try {
         setIsSaving(true);
-        await axios.put(`${import.meta.env.VITE_API_URL}/settings`, defaultSettings);
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/settings`, defaultSettings);
         setSettings(defaultSettings);
         showToast('Settings reset to defaults', 'info');
       } catch (error) {

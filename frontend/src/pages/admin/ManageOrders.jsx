@@ -65,7 +65,7 @@ const ManageOrders = () => {
 
     try {
       // Direct axios call since orderApi doesn't export updatePaymentStatus yet
-      await axios.put(`${import.meta.env.VITE_API_URL}/orders/${orderId}/payment`, { paymentStatus });
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}/payment`, { paymentStatus });
       
       setOrders(orders.map(order => 
         order._id === orderId ? { ...order, paymentStatus } : order

@@ -76,7 +76,7 @@ const Payment = () => {
         } catch (e) {}
       }
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/orders`, orderPayload);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/orders`, orderPayload);
       clearCart();
       
       if (paymentData.paymentStatus === 'Failed') {

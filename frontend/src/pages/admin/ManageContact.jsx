@@ -15,7 +15,7 @@ const ManageContact = () => {
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/contact`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/contact`);
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching contact messages:', error);
@@ -33,7 +33,7 @@ const ManageContact = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this message?')) {
       try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/contact/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/contact/${id}`);
         setMessages(messages.filter((msg) => msg._id !== id));
         showToast('Message deleted successfully');
       } catch (error) {
@@ -46,7 +46,7 @@ const ManageContact = () => {
   const handleToggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'Unread' ? 'Read' : 'Unread';
     try {
-      const response = await axios.put(`${import.meta.env.VITE_API_URL}/contact/${id}`, { status: newStatus });
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/contact/${id}`, { status: newStatus });
       setMessages(messages.map((msg) => (msg._id === id ? response.data : msg)));
       showToast(`Message marked as ${newStatus}`);
     } catch (error) {

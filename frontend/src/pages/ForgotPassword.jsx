@@ -22,7 +22,7 @@ const ForgotPassword = () => {
     setError(null);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/forgot-password`, { email });
       setMessage(response.data.message || 'If an account exists with this email, a password reset link has been sent.');
       setEmail('');
     } catch (err) {

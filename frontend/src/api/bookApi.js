@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Configure Axios with the Base URL of our backend API
 const API = axios.create({
-    baseURL: `${import.meta.env.VITE_API_URL}/books`,
+    baseURL: `${import.meta.env.VITE_API_URL}/api/books`,
 });
 
 // 1. Fetch all books from the database
