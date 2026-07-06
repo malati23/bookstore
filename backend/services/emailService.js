@@ -7,39 +7,58 @@ const getTransporter = async () => {
   let pass = process.env.EMAIL_PASS;
 
   if (!user || !pass) {
-    console.error("Email configuration missing.");
+    console.error("[EmailService] Error: Email configuration missing.");
     throw new Error("Email service is not configured. Please set EMAIL_USER and EMAIL_PASS inside the .env file.");
   }
 
-  console.log("Connecting to Gmail...");
-  return nodemailer.createTransport({
-    service: 'gmail',
+  console.log("[EmailService] Configuring SMTP connection for Gmail...");
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true for port 465
     auth: {
       user: user,
       pass: pass
-    }
+    },
+    // Add timeouts to prevent hanging on Render
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
   });
+
+  try {
+    console.log("[EmailService] Verifying SMTP connection...");
+    await transporter.verify();
+    console.log("[EmailService] SMTP connection verified successfully.");
+    return transporter;
+  } catch (error) {
+    console.error("[EmailService] Transporter verification failed:", error.message);
+    throw error;
+  }
 };
 
 const sendMailWrapper = async (mailOptions) => {
   try {
+    console.log("[EmailService] Initializing transporter...");
     const transporter = await getTransporter();
     if (!transporter) return; // Notifications disabled or missing credentials
     
     const settings = await Setting.findOne();
     mailOptions.from = `"${settings?.storeName || 'Modern BookStore'}" <${transporter.options.auth.user}>`;
     
-    console.log(`Sending reset email...`);
+    console.log(`[EmailService] Attempting to send email to: ${mailOptions.to}, Subject: "${mailOptions.subject}"`);
     const info = await transporter.sendMail(mailOptions);
-    console.log(`Reset email sent successfully. (Message ID: ${info.messageId})`);
+    console.log(`[EmailService] Email sent successfully! Message ID: ${info.messageId}`);
     return info;
   } catch (error) {
     if (error.message.includes("Email service is not configured")) {
-      console.error(error.message);
-    } else if (error.message.includes("Invalid login") || error.message.includes("Authentication")) {
-      console.error("SMTP authentication failed.");
+      console.error("[EmailService] Configuration Error:", error.message);
+    } else if (error.message.includes("Invalid login") || error.message.includes("Authentication") || error.responseCode === 535) {
+      console.error("[EmailService] SMTP Authentication failed. Please check your EMAIL_USER and EMAIL_PASS app password.");
+    } else if (error.code === 'ETIMEDOUT' || error.message.includes("timeout")) {
+      console.error("[EmailService] SMTP Connection timeout. The server took too long to respond.");
     } else {
-      console.error("Error sending email:", error.message);
+      console.error("[EmailService] Error sending email:", error.message);
     }
     throw error; // Re-throw to be caught by the caller if needed
   }
@@ -57,7 +76,7 @@ const sendWelcomeEmail = async (email, name) => {
         <p style="font-size: 16px; color: #333;">Thank you for joining us! We are thrilled to have you on board.</p>
         <p style="font-size: 16px; color: #333;">Explore our wide collection of books and discover your next great read today.</p>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="http://localhost:5173/Course" style="background-color: #ec4899; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 5px;">Start Browsing</a>
+          <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}/Course" style="background-color: #ec4899; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 5px;">Start Browsing</a>
         </div>
         <p style="font-size: 14px; color: #777;">Happy Reading,<br>The Modern BookStore Team</p>
       </div>
