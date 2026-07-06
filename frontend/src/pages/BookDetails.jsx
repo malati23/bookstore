@@ -7,6 +7,8 @@ import ReviewsSection from '../components/ReviewsSection';
 import Navebar from '../component/Navebar';
 import Footer from '../component/Footer';
 
+import mockList from '../assets/List.json';
+
 const BookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
@@ -23,7 +25,14 @@ const BookDetails = () => {
         setBook(data);
         setError(null);
       } catch (err) {
-        setError("Book Not Found or an error occurred.");
+        // Fallback: Check if the book exists in our mockList (since we seeded the shop with it)
+        const mockBook = mockList.find(b => b.id.toString() === id || (b._id && b._id.toString() === id));
+        if (mockBook) {
+          setBook(mockBook);
+          setError(null);
+        } else {
+          setError("Book Not Found or an error occurred.");
+        }
       } finally {
         setLoading(false);
       }

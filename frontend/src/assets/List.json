@@ -1,50 +1,102 @@
 [
   {
     "id": 1,
-    "name": "story book",
-    "title": "Lorem ipsum dolor, sit amet consectetur adipisicing",
-    "category": "Free",
-    "price": 0,
-    "image": "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg"
+    "name": "The Great Gatsby",
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "category": "Fiction",
+    "price": 399,
+    "description": "A classic novel of the Jazz Age, exploring themes of wealth, society, and the American Dream.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
   },
   {
     "id": 2,
-    "name": "comedy book",
-    "title": "Lorem ipsum dolor, sit amet consectetur adipisicing",
-    "category": "Sports",
-    "price": 59,
-    "image": "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg"
+    "name": "Sapiens: A Brief History of Humankind",
+    "title": "Sapiens: A Brief History of Humankind",
+    "author": "Yuval Noah Harari",
+    "category": "History",
+    "price": 599,
+    "description": "Explores the history of the human species, from the Stone Age up to the twenty-first century.",
+    "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&auto=format&fit=crop"
   },
   {
     "id": 3,
-    "name": "book",
-    "title": "Lorem ipsum dolor, sit amet consectetur adipisicing",
-    "category": "Song",
-    "price": 0,
-    "image": "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg"
+    "name": "A Brief History of Time",
+    "title": "A Brief History of Time",
+    "author": "Stephen Hawking",
+    "category": "Science",
+    "price": 499,
+    "description": "A landmark volume in science writing by one of the great minds of our time.",
+    "image": "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=600&auto=format&fit=crop"
   },
   {
     "id": 4,
-    "name": "store book",
-    "title": "Lorem ipsum dolor, sit amet consectetur adipisicing",
-    "category": "Free",
-    "price": 0,
-    "image": "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg"
+    "name": "Harry Potter and the Sorcerer's Stone",
+    "title": "Harry Potter and the Sorcerer's Stone",
+    "author": "J.K. Rowling",
+    "category": "Fantasy",
+    "price": 450,
+    "description": "The first book in the beloved Harry Potter series.",
+    "image": "https://images.unsplash.com/photo-1618666012174-83b441c0bc76?q=80&w=600&auto=format&fit=crop"
   },
   {
-    "id": 4,
-    "name": "store book",
-    "title": "Lorem ipsum dolor, sit amet consectetur adipisicing",
-    "category": "Free",
-    "price": 0,
-    "image": "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg"
+    "id": 5,
+    "name": "Steve Jobs",
+    "title": "Steve Jobs",
+    "author": "Walter Isaacson",
+    "category": "Biography",
+    "price": 650,
+    "description": "The exclusive biography of the visionary Apple founder.",
+    "image": "https://images.unsplash.com/photo-1585776269168-1eb2ff382894?q=80&w=600&auto=format&fit=crop"
   },
   {
-    "id": 4,
-    "name": "store book",
-    "title": "Lorem ipsum dolor, sit amet consectetur adipisicing",
-    "category": "Free",
-    "price": 0,
-    "image": "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg"
+    "id": 6,
+    "name": "The Very Hungry Caterpillar",
+    "title": "The Very Hungry Caterpillar",
+    "author": "Eric Carle",
+    "category": "Children",
+    "price": 299,
+    "description": "A classic children's book with beautiful illustrations.",
+    "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
+  },
+  {
+    "id": 7,
+    "name": "Thinking, Fast and Slow",
+    "title": "Thinking, Fast and Slow",
+    "author": "Daniel Kahneman",
+    "category": "Non-Fiction",
+    "price": 550,
+    "description": "A deep dive into how our minds work and how we make choices.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+  },
+  {
+    "id": 8,
+    "name": "Dune",
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "category": "Science Fiction",
+    "price": 420,
+    "description": "A seminal sci-fi epic set on the desert planet Arrakis.",
+    "image": "https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=80&w=600&auto=format&fit=crop"
+  },
+  {
+    "id": 9,
+    "name": "Atomic Habits",
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "category": "Non-Fiction",
+    "price": 399,
+    "description": "An easy & proven way to build good habits & break bad ones.",
+    "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&auto=format&fit=crop"
+  },
+  {
+    "id": 10,
+    "name": "The Hobbit",
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "category": "Fantasy",
+    "price": 350,
+    "description": "A fantasy classic that follows the journey of Bilbo Baggins.",
+    "image": "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=600&auto=format&fit=crop"
   }
 ]

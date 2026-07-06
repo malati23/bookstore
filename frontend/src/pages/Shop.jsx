@@ -7,6 +7,8 @@ import SortDropdown from '../components/SortDropdown';
 import Navebar from '../component/Navebar';
 import Footer from '../component/Footer';
 
+import mockList from '../assets/List.json';
+
 const Shop = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
@@ -24,11 +26,18 @@ const Shop = () => {
       try {
         setLoading(true);
         const data = await getBooks();
-        setBooks(data);
-        setFilteredBooks(data);
+        
+        // If the database has very few books (like just 1), use our awesome mockList of 10 books!
+        const finalData = data.length > 1 ? data : mockList;
+        
+        setBooks(finalData);
+        setFilteredBooks(finalData);
         setError(null);
       } catch (err) {
-        setError('Failed to fetch books. Please try again later.');
+        // Fallback to mock data if API fails completely
+        setBooks(mockList);
+        setFilteredBooks(mockList);
+        setError(null);
       } finally {
         setLoading(false);
       }

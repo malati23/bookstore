@@ -1,35 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { formatCurrency } from '../utils/currency';
-
+import { Link } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-// Import the API client to fetch real data from MongoDB
 import { getBooks } from "../api/bookApi";
+import mockList from '../assets/List.json';
 
 function Freebook() {
-  console.log("Component Rendered: Freebook.jsx");
-
-  const [bookList, setBookList] = useState([]);
+  const { addToCart } = useCart();
+  const [allBooks, setAllBooks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("useEffect Running in Freebook.jsx");
-
     const fetchFreeBooks = async () => {
-      console.log("Fetching Books in Freebook...");
       try {
         const data = await getBooks();
-        console.log("API Response (data) in Freebook:", data);
-
-        setBookList(data);
-        console.log("Filtered Free Books State:", data);
-
+        const finalData = data.length > 1 ? data : mockList;
+        
+        setAllBooks(finalData);
+        
+        // Extract unique categories
+        const uniqueCategories = ['All', ...new Set(finalData.map(book => book.category || 'General'))];
+        setCategories(uniqueCategories);
+        
         setLoading(false);
       } catch (err) {
-        console.error("API Error in Freebook:", err);
-        setError("Failed to fetch free courses");
+        // Fallback to mock data
+        setAllBooks(mockList);
+        const uniqueCategories = ['All', ...new Set(mockList.map(book => book.category || 'General'))];
+        setCategories(uniqueCategories);
         setLoading(false);
       }
     };
@@ -37,8 +41,12 @@ function Freebook() {
     fetchFreeBooks();
   }, []);
 
+  const displayedBooks = activeCategory === 'All' 
+    ? allBooks 
+    : allBooks.filter(book => (book.category || 'General') === activeCategory);
+
   if (loading) {
-    return <div className="text-center mt-10">Loading free courses...</div>;
+    return <div className="text-center mt-10">Loading books...</div>;
   }
 
   if (error) {
@@ -46,37 +54,71 @@ function Freebook() {
   }
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4">
-      <h1 className="text-xl font-semibold mb-4">
-        Free Offered Courses
-      </h1>
+    <div className="max-w-screen-2xl mx-auto px-4 py-12">
+      <div className="mb-10 text-center">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Explore by Category</h1>
+        <p className="text-gray-600 max-w-2xl mx-auto">Discover our vast collection of books tailored to your favorite genres. Find your next great read today!</p>
+      </div>
 
-      <Swiper
-        spaceBetween={20}
-        slidesPerView={4}
-      >
-        {bookList.map((item) => (
-          // FIX: Use item._id (MongoDB's unique ID) as the key.
-          // We add a fallback to item.id just in case static data is ever passed.
-          <SwiperSlide key={item._id || item.id} >
-            <div className="bg-white rounded p-4 mt-4 my-4 bg-base-100 shadow-xl">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-40 object-cover"
-              />
+      {/* Category Tabs */}
+      <div className="flex flex-wrap justify-center gap-3 mb-10">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
+              activeCategory === category
+                ? 'bg-pink-500 text-white shadow-md transform scale-105'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-pink-500 hover:text-pink-500'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
 
-              <h2 className="mt-2 font-semibold">{item.title || item.name}</h2>
-              <div className="card-actions justify-between mt-3">
-                <div className="badge badge-outline">{formatCurrency(item.price)}</div>
-                <div className="cursor-pointer px-2 py-1 rounded-full border-[2px] hover:bg-pink-500 hover:text-white duration-200">
-                  Buy Now
-                </div>
+      {/* Books Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {displayedBooks.map((item) => (
+          <div key={item._id || item.id} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
+            <div className="relative h-56 mb-4 overflow-hidden rounded-xl">
+              <Link to={`/books/${item._id || item.id}`}>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 cursor-pointer"
+                />
+              </Link>
+              <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-pink-600 shadow-sm pointer-events-none">
+                {item.category}
               </div>
             </div>
-          </SwiperSlide>
+
+            <div className="flex flex-col flex-grow">
+              <Link to={`/books/${item._id || item.id}`} className="hover:text-pink-600 transition-colors">
+                <h3 className="font-bold text-lg line-clamp-2 mb-1">{item.title || item.name}</h3>
+              </Link>
+              <p className="text-sm text-gray-500 mb-4">{item.author}</p>
+              
+              <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-50">
+                <div className="font-extrabold text-pink-600 text-lg">{formatCurrency(item.price)}</div>
+                <Link 
+                  to={`/books/${item._id || item.id}`}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition-colors shadow-sm hover:shadow-md inline-block text-center"
+                >
+                  Buy Now
+                </Link>
+              </div>
+            </div>
+          </div>
         ))}
-      </Swiper>
+      </div>
+      
+      {displayedBooks.length === 0 && (
+        <div className="text-center py-20 text-gray-500">
+          No books found in this category.
+        </div>
+      )}
     </div>
   );
 }

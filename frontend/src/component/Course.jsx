@@ -14,6 +14,20 @@ function Course() {
   // State to handle any errors during fetching
   const [error, setError] = useState(null);
 
+  // 10 types of books to display
+  const mockBooks = [
+    { _id: 1, name: "Science Fiction", title: "Dune", category: "Sci-Fi", price: 299, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 2, name: "Fantasy", title: "Harry Potter", category: "Fantasy", price: 399, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 3, name: "Mystery", title: "Sherlock Holmes", category: "Mystery", price: 199, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 4, name: "Romance", title: "Pride and Prejudice", category: "Romance", price: 250, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 5, name: "Thriller", title: "The Girl with the Dragon Tattoo", category: "Thriller", price: 350, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 6, name: "Non-Fiction", title: "Sapiens", category: "Non-Fiction", price: 499, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 7, name: "Biography", title: "Steve Jobs", category: "Biography", price: 450, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 8, name: "History", title: "Guns, Germs, and Steel", category: "History", price: 399, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 9, name: "Self-Help", title: "Atomic Habits", category: "Self-Help", price: 299, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" },
+    { _id: 10, name: "Poetry", title: "The Sun and Her Flowers", category: "Poetry", price: 150, image: "https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books_23-2149342941.jpg" }
+  ];
+
   // useEffect runs when the component mounts to fetch books
   useEffect(() => {
     console.log("useEffect Running in Course.jsx");
@@ -25,13 +39,17 @@ function Course() {
         const data = await getBooks();
         console.log("API Response (data):", data);
 
-        setBookList(data); // Store fetched data in state
+        if (data && data.length > 0) {
+          setBookList(data); // Store fetched data in state
+        } else {
+          setBookList(mockBooks); // Use mock books if API returns empty
+        }
         console.log("Books State after set:", data);
         
         setLoading(false); // Turn off loading indicator
       } catch (err) {
         console.error("API Error in Course.jsx:", err);
-        setError("Failed to fetch books. Please try again later."); // Set error message
+        setBookList(mockBooks); // Fallback to 10 types of books if API fails
         setLoading(false); // Turn off loading even on error
       }
     };

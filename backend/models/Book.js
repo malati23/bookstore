@@ -63,6 +63,37 @@ const BookSchema = new mongoose.Schema({
         type: String,
         default: "English"   // Defaults to English if not specified
     },
+    // ISBN number
+    isbn: {
+        type: String,
+        trim: true
+    },
+    // Publisher name
+    publisher: {
+        type: String,
+        trim: true
+    },
+    // Number of pages
+    pages: {
+        type: Number,
+        min: 1
+    },
+    // Book format (Paperback, Hardcover, Ebook)
+    format: {
+        type: String,
+        enum: ['Paperback', 'Hardcover', 'Ebook'],
+        default: 'Paperback'
+    },
+    // Is this a featured book?
+    featured: {
+        type: Boolean,
+        default: false
+    },
+    // Is this a bestseller?
+    bestseller: {
+        type: Boolean,
+        default: false
+    },
     // Timestamp for when the book document was created
     createdAt: {
         type: Date,
