@@ -59,7 +59,7 @@ function Navebar() {
       <div className="navbar">
   <div className="navbar-start">
     <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden p-1 mr-1">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
       </div>
       <ul
@@ -68,9 +68,9 @@ function Navebar() {
        {navitem}
       </ul>
     </div>
-    <a className="text-2xl font-bold">BookStore</a>
+    <a className="text-xl md:text-2xl font-bold cursor-pointer" href="/">BookStore</a>
   </div>
-  <div className='navbar-end space-x-3'>
+  <div className='navbar-end space-x-1 md:space-x-3'>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
       {navitem}
@@ -147,15 +147,15 @@ function Navebar() {
 
   <div>
     {authUser ? (
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1 md:gap-3">
         <Link 
           to="/admin" 
-          className="hidden lg:block bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 duration-300 cursor-pointer text-sm font-semibold whitespace-nowrap"
+          className="hidden md:block bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 duration-300 cursor-pointer text-xs md:text-sm font-semibold whitespace-nowrap"
         >
           Admin
         </Link>
         <button 
-          className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 duration-300 cursor-pointer"
+          className="bg-red-500 text-white px-2 py-1 md:px-3 md:py-2 rounded-md hover:bg-red-600 duration-300 cursor-pointer text-xs md:text-sm"
           onClick={() => {
             logout();
           }}
@@ -164,14 +164,14 @@ function Navebar() {
         </button>
       </div>
     ) : (
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1 md:gap-3">
         <Link 
           to="/admin" 
-          className="hidden lg:block bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 duration-300 cursor-pointer text-sm font-semibold whitespace-nowrap"
+          className="hidden md:block bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 duration-300 cursor-pointer text-xs md:text-sm font-semibold whitespace-nowrap"
         >
           Admin
         </Link>
-        <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer"
+        <a className="bg-black text-white px-2 py-1 md:px-3 md:py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer text-xs md:text-sm"
         onClick={()=> document.getElementById("my_modal_3").showModal()}>
           Login
         </a>

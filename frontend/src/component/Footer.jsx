@@ -5,7 +5,7 @@ function Footer() {
     <div>
         <hr/>
       <footer className="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
-  <nav className="grid grid-flow-col gap-4">
+  <nav className="flex flex-wrap justify-center gap-4 md:grid md:grid-flow-col">
     <a href="/about" className="link link-hover">About us</a>
     <a href="/contact" className="link link-hover">Contact</a>
     <a href="/faq" className="link link-hover">FAQ</a>

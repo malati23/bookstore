@@ -28,7 +28,7 @@ function Banner() {
     <button className="btn  mt-6 btn-secondary">Secondary</button>
      </div>
       <div className='w-full md:w-1/2 flex items-center justify-center mt-12 md:mt-32'> 
-      <img src={book} className='w-90 h-90' alt=''/>
+      <img src={book} className='w-full max-w-sm md:max-w-md h-auto rounded-lg' alt='Hero Book'/>
       </div>
     </div>
   )
