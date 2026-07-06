@@ -11,11 +11,11 @@ const getTransporter = async () => {
     throw new Error("Email service is not configured. Please set EMAIL_USER and EMAIL_PASS inside the .env file.");
   }
 
-  console.log("[EmailService] Configuring SMTP connection for Gmail...");
+  console.log("[EmailService] Configuring SMTP connection for Brevo...");
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for port 465
+    host: 'smtp-relay.brevo.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports (587 uses STARTTLS)
     auth: {
       user: user,
       pass: pass
