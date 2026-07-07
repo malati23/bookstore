@@ -48,7 +48,7 @@ const registerUser = async (req, res, next) => {
       );
 
       // Send Welcome Email asynchronously
-      emailService.sendWelcomeEmail(user.email, user.name);
+      // emailService.sendWelcomeEmail(user.email, user.name);
 
       // 7. Return success message, token, and user details
       // 201 Created: The resource was successfully created
@@ -160,8 +160,11 @@ const forgotPassword = async (req, res, next) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save({ validateBeforeSave: false });
 
-    // Send the password reset email asynchronously
-    emailService.sendPasswordResetEmail(user.email, resetToken, user.name).catch(err => {
+    // Construct the reset URL
+    const resetLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+    
+    // Send the password reset email asynchronously using Resend
+    emailService.sendResetEmail(user.email, resetLink).catch(err => {
       console.error("Failed to send password reset email:", err.message);
     });
 
@@ -203,9 +206,9 @@ const resetPassword = async (req, res, next) => {
     await user.save();
 
     // Send the password change confirmation email asynchronously
-    emailService.sendPasswordChangeConfirmationEmail(user.email, user.name).catch(err => {
-      console.error("Failed to send password change confirmation email:", err.message);
-    });
+    // emailService.sendPasswordChangeConfirmationEmail(user.email, user.name).catch(err => {
+    //   console.error("Failed to send password change confirmation email:", err.message);
+    // });
 
     res.status(200).json({ success: true, message: 'Password has been reset successfully' });
   } catch (error) {
