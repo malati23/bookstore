@@ -162,19 +162,14 @@ const forgotPassword = async (req, res, next) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save({ validateBeforeSave: false });
 
-<<<<<<< HEAD
     console.log(`[ForgotPassword] user.email: ${user.email}`);
     console.log(`[ForgotPassword] Reset token: ${resetToken}`);
 
-    // Send the password reset email asynchronously
-    emailService.sendPasswordResetEmail(user.email, resetToken, user.name).catch(err => {
-=======
     // Construct the reset URL
     const resetLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
     
     // Send the password reset email asynchronously using Resend
     emailService.sendResetEmail(user.email, resetLink).catch(err => {
->>>>>>> 18ee4de41dc77b69f2a7bab7c0aa78964f15a2b3
       console.error("Failed to send password reset email:", err.message);
     });
 
