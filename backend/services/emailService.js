@@ -1,11 +1,10 @@
-const nodemailer = require('nodemailer');
-const Setting = require('../models/Setting');
+const { Resend } = require('resend');
 
-// Get transporter dynamically from Settings or ENV
-const getTransporter = async () => {
-  let user = process.env.EMAIL_USER;
-  let pass = process.env.EMAIL_PASS;
+if (!process.env.RESEND_API_KEY) {
+  throw new Error('RESEND_API_KEY is missing. Please add it to your .env file.');
+}
 
+<<<<<<< HEAD
   if (!user || !pass) {
     console.error("[EmailService] Error: Email configuration missing.");
     throw new Error("Email service is not configured. Please set EMAIL_USER and EMAIL_PASS inside the .env file.");
@@ -25,18 +24,26 @@ const getTransporter = async () => {
     greetingTimeout: 10000,
     socketTimeout: 10000,
   });
+=======
+const resend = new Resend(process.env.RESEND_API_KEY);
+>>>>>>> 18ee4de41dc77b69f2a7bab7c0aa78964f15a2b3
 
+async function sendResetEmail(toEmail, resetLink) {
   try {
-    console.log("[EmailService] Verifying SMTP connection...");
-    await transporter.verify();
-    console.log("[EmailService] SMTP connection verified successfully.");
-    return transporter;
+    await resend.emails.send({
+      from: 'BookStore <onboarding@resend.dev>',
+      to: toEmail,
+      subject: 'Password Reset Request',
+      html: `<p>You requested a password reset. Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+    });
+    console.log('Password reset email sent successfully to', toEmail);
   } catch (error) {
-    console.error("[EmailService] Transporter verification failed:", error.message);
+    console.error('Failed to send password reset email:', error);
     throw error;
   }
-};
+}
 
+<<<<<<< HEAD
 const sendMailWrapper = async (mailOptions) => {
   try {
     console.log("[EmailService] Initializing transporter...");
@@ -238,3 +245,6 @@ module.exports = {
   sendOrderStatusEmail,
   sendPasswordChangeConfirmationEmail
 };
+=======
+module.exports = { sendResetEmail };
+>>>>>>> 18ee4de41dc77b69f2a7bab7c0aa78964f15a2b3

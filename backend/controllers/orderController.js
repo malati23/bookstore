@@ -36,11 +36,11 @@ const createOrder = async (req, res, next) => {
     
     // Send email confirmation
     if (savedOrder.customerEmail) {
-      emailService.sendOrderConfirmationEmail(savedOrder.customerEmail, savedOrder);
+      // emailService.sendOrderConfirmationEmail(savedOrder.customerEmail, savedOrder);
       
       // If it was an online payment that is already 'Completed'
       if (savedOrder.paymentStatus === 'Completed') {
-        emailService.sendPaymentConfirmationEmail(savedOrder.customerEmail, savedOrder);
+        // emailService.sendPaymentConfirmationEmail(savedOrder.customerEmail, savedOrder);
       }
     }
     
@@ -69,7 +69,7 @@ const updateOrderStatus = async (req, res, next) => {
 
     // Send email if status is Shipped or Delivered
     if (updatedOrder.customerEmail && (orderStatus === 'Shipped' || orderStatus === 'Delivered')) {
-      emailService.sendOrderStatusEmail(updatedOrder.customerEmail, updatedOrder, orderStatus);
+      // emailService.sendOrderStatusEmail(updatedOrder.customerEmail, updatedOrder, orderStatus);
     }
 
     res.status(200).json(updatedOrder);
@@ -97,7 +97,7 @@ const updatePaymentStatus = async (req, res, next) => {
 
     // Send payment confirmation email if status is completed
     if (updatedOrder.customerEmail && paymentStatus === 'Completed') {
-      emailService.sendPaymentConfirmationEmail(updatedOrder.customerEmail, updatedOrder);
+      // emailService.sendPaymentConfirmationEmail(updatedOrder.customerEmail, updatedOrder);
     }
 
     res.status(200).json(updatedOrder);
