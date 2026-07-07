@@ -11,11 +11,11 @@ const getTransporter = async () => {
     throw new Error("Email service is not configured. Please set EMAIL_USER and EMAIL_PASS inside the .env file.");
   }
 
-  console.log("[EmailService] Configuring SMTP connection for Brevo...");
+  console.log("[EmailService] Configuring SMTP connection for Gmail...");
   const transporter = nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports (587 uses STARTTLS)
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
       user: user,
       pass: pass
@@ -46,8 +46,10 @@ const sendMailWrapper = async (mailOptions) => {
     const settings = await Setting.findOne();
     mailOptions.from = `"${settings?.storeName || 'Modern BookStore'}" <${transporter.options.auth.user}>`;
     
+    console.log(`[EmailService] Recipient email used by Nodemailer: ${mailOptions.to}`);
     console.log(`[EmailService] Attempting to send email to: ${mailOptions.to}, Subject: "${mailOptions.subject}"`);
     const info = await transporter.sendMail(mailOptions);
+    console.log(`[EmailService] Result of transporter.sendMail():`, JSON.stringify(info));
     console.log(`[EmailService] Email sent successfully! Message ID: ${info.messageId}`);
     return info;
   } catch (error) {

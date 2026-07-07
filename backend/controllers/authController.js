@@ -141,6 +141,7 @@ const loginUser = async (req, res, next) => {
 const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
+    console.log(`[ForgotPassword] Email received from frontend: ${email}`);
     if (!email) return res.status(400).json({ message: 'Please provide an email' });
 
     const user = await User.findOne({ email });
@@ -148,6 +149,7 @@ const forgotPassword = async (req, res, next) => {
     // Always return a generic message to prevent email enumeration, even if user isn't found
     const genericMessage = 'If an account exists with this email, a password reset link has been sent.';
 
+    console.log(`[ForgotPassword] User found in MongoDB: ${!!user}`);
     if (!user) {
       return res.status(200).json({ success: true, message: genericMessage });
     }
@@ -159,6 +161,9 @@ const forgotPassword = async (req, res, next) => {
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save({ validateBeforeSave: false });
+
+    console.log(`[ForgotPassword] user.email: ${user.email}`);
+    console.log(`[ForgotPassword] Reset token: ${resetToken}`);
 
     // Send the password reset email asynchronously
     emailService.sendPasswordResetEmail(user.email, resetToken, user.name).catch(err => {
