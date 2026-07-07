@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import the specific controller functions that will handle the business logic for these routes
-const { registerUser, loginUser, forgotPassword, resetPassword } = require('../controllers/authController');
+const { registerUser, loginUser, forgotPassword, verifyOTP } = require('../controllers/authController');
 
 /**
  * @route   POST /register
@@ -31,17 +31,17 @@ router.post('/login', loginUser);
 
 /**
  * @route   POST /forgot-password
- * @desc    Generate password reset token
+ * @desc    Generate and send OTP for passwordless login
  * @access  Public
  */
 router.post('/forgot-password', forgotPassword);
 
 /**
- * @route   POST /reset-password/:token
- * @desc    Reset password using token
+ * @route   POST /verify-otp
+ * @desc    Verify OTP to log in
  * @access  Public
  */
-router.post('/reset-password/:token', resetPassword);
+router.post('/verify-otp', verifyOTP);
 
 // Export the configured router so it can be imported and mounted in the main server.js file later
 module.exports = router;

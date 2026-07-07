@@ -27,7 +27,7 @@ import Contact from './pages/Contact'
 import About from './pages/About'
 import FAQ from './pages/FAQ'
 import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
+import VerifyOTP from './pages/VerifyOTP'
 import Signup from './component/Signup'
 import ProtectedRoute from './component/ProtectedRoute'
 import LoginPage from './pages/LoginPage'
@@ -47,7 +47,7 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/Checkout" element={<Checkout />} />
         <Route path="/Payment" element={<Payment />} />

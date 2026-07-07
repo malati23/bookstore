@@ -146,36 +146,29 @@ const forgotPassword = async (req, res, next) => {
 
     const user = await User.findOne({ email });
     
-    // Always return a generic message to prevent email enumeration, even if user isn't found
-    const genericMessage = 'If an account exists with this email, a password reset link has been sent.';
-
     console.log(`[ForgotPassword] User found in MongoDB: ${!!user}`);
     if (!user) {
-      return res.status(200).json({ success: true, message: genericMessage });
+      return res.status(404).json({ message: 'Email not found' });
     }
 
-    // Generate token
-    const resetToken = crypto.randomBytes(32).toString('hex');
+    // Generate 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
     
-    // We will just store the direct token and expire time
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.otp = otp;
+    user.otpExpiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
     await user.save({ validateBeforeSave: false });
 
     console.log(`[ForgotPassword] user.email: ${user.email}`);
-    console.log(`[ForgotPassword] Reset token: ${resetToken}`);
+    console.log(`[ForgotPassword] OTP generated.`);
 
-    // Construct the reset URL
-    const resetLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
-    
-    // Send the password reset email asynchronously using Resend
-    emailService.sendResetEmail(user.email, resetLink).catch(err => {
+    // Send the OTP email asynchronously using Resend
+    emailService.sendResetEmail(user.email, otp).catch(err => {
       console.error("Failed to send password reset email:", err.message);
     });
 
     res.status(200).json({ 
       success: true, 
-      message: genericMessage
+      message: 'OTP has been sent successfully.'
     });
   } catch (error) {
     console.error(error);
@@ -184,38 +177,45 @@ const forgotPassword = async (req, res, next) => {
 };
 
 /**
- * @desc    Reset Password
- * @route   POST /api/auth/reset-password/:token
+ * @desc    Verify OTP and Login
+ * @route   POST /api/auth/verify-otp
  * @access  Public
  */
-const resetPassword = async (req, res, next) => {
+const verifyOTP = async (req, res, next) => {
   try {
-    const { token } = req.params;
-    const { password } = req.body;
-
-    if (!password) return res.status(400).json({ message: 'Please provide a new password' });
-
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
-
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired reset token' });
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ message: 'Please provide email and OTP' });
     }
 
-    // Set new password (it will be hashed by pre-save middleware)
-    user.password = password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
+    const user = await User.findOne({ email });
+    if (!user || user.otp !== otp || user.otpExpiresAt < Date.now()) {
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    }
 
-    // Send the password change confirmation email asynchronously
-    // emailService.sendPasswordChangeConfirmationEmail(user.email, user.name).catch(err => {
-    //   console.error("Failed to send password change confirmation email:", err.message);
-    // });
+    // OTP is valid. Clear OTP and log user in.
+    user.otp = undefined;
+    user.otpExpiresAt = undefined;
+    await user.save({ validateBeforeSave: false });
 
-    res.status(200).json({ success: true, message: 'Password has been reset successfully' });
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET || 'fallback_secret_key_for_development',
+      { expiresIn: '30d' }
+    );
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'OTP verified successfully',
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    });
   } catch (error) {
     console.error(error);
     next(error);
@@ -226,5 +226,5 @@ module.exports = {
   registerUser,
   loginUser,
   forgotPassword,
-  resetPassword,
+  verifyOTP,
 };

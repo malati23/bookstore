@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navebar from '../component/Navebar';
 import Footer from '../component/Footer';
 
@@ -9,6 +9,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,11 +24,16 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/forgot-password`, { email });
-      setMessage(response.data.message || 'If an account exists with this email, a password reset link has been sent.');
-      setEmail('');
+      setMessage(response.data.message || 'If an account exists with this email, an OTP has been sent.');
+      
+      // Delay navigation slightly to let user read the message, or navigate immediately
+      setTimeout(() => {
+        navigate('/verify-otp', { state: { email } });
+      }, 1500);
+
     } catch (err) {
       console.error('Forgot Password Error:', err);
-      setError(err.response?.data?.message || 'Failed to send reset link. Please try again.');
+      setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -40,9 +46,9 @@ const ForgotPassword = () => {
       <main className="flex-grow flex items-center justify-center p-4">
         <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Forgot Password?</h1>
+            <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Passwordless Login</h1>
             <p className="text-gray-500 text-sm">
-              Enter the email address associated with your account and we'll send you a link to reset your password.
+              Enter the email address associated with your account and we'll send you a 6-digit OTP to log in securely.
             </p>
           </div>
 
@@ -57,8 +63,6 @@ const ForgotPassword = () => {
               {message}
             </div>
           )}
-
-
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -84,10 +88,10 @@ const ForgotPassword = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Sending...
+                  Sending OTP...
                 </>
               ) : (
-                'Send Reset Link'
+                'Send OTP'
               )}
             </button>
           </form>

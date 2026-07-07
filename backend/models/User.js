@@ -42,10 +42,10 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
-    resetPasswordToken: {
+    otp: {
       type: String,
     },
-    resetPasswordExpires: {
+    otpExpiresAt: {
       type: Date,
     },
   },
